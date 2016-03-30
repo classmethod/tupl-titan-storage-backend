@@ -1,0 +1,627 @@
+{
+    "Description": "This stack creates a VPC, an EC2 Amazon Linux 2016.03 host in the VPC with a Public IP, and deploys Gremlin Server with the Classmethod Tupl Storage Backend for Titan on it. **WARNING** This template creates an Amazon EC2 instance. You will be billed for the AWS resources used if you create a stack from this template.",
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Mappings": {
+        "AWSRegionArch2AMI": {
+            "us-east-1":      { "HVM64": "ami-08111162", "HVMG2": "ami-ebcec381" },
+            "us-west-2":      { "HVM64": "ami-c229c0a2", "HVMG2": "ami-0f28c06f" },
+            "us-west-1":      { "HVM64": "ami-1b0f7d7b", "HVMG2": "ami-ab9defcb" },
+            "us-gov-west-1":  { "HVM64": "ami-0a60dc6b", "HVMG2": "NOT_SUPPORTED" },
+            "eu-west-1":      { "HVM64": "ami-31328842", "HVMG2": "ami-d1d652a2" },
+            "eu-central-1":   { "HVM64": "ami-e2df388d", "HVMG2": "ami-5240a73d" },
+            "ap-northeast-1": { "HVM64": "ami-f80e0596", "HVMG2": "ami-34a9a35a" },
+            "ap-northeast-2": { "HVM64": "ami-6598510b", "HVMG2": "NOT_SUPPORTED" },
+            "ap-southeast-1": { "HVM64": "ami-e90dc68a", "HVMG2": "ami-6f6ca70c" },
+            "ap-southeast-2": { "HVM64": "ami-f2210191", "HVMG2": "ami-88c1e1eb" },
+            "sa-east-1":      { "HVM64": "ami-1e159872", "HVMG2": "NOT_SUPPORTED" },
+            "cn-north-1":     { "HVM64": "ami-49e22924", "HVMG2": "NOT_SUPPORTED" }
+        },
+        "AWSInstanceType2Arch": {
+            "c3.2xlarge":  { "Arch": "HVM64" },
+            "c3.4xlarge":  { "Arch": "HVM64" },
+            "c3.8xlarge":  { "Arch": "HVM64" },
+            "c3.large":    { "Arch": "HVM64" },
+            "c3.xlarge":   { "Arch": "HVM64" },
+            "c4.2xlarge":  { "Arch": "HVM64" },
+            "c4.4xlarge":  { "Arch": "HVM64" },
+            "c4.8xlarge":  { "Arch": "HVM64" },
+            "c4.large":    { "Arch": "HVM64" },
+            "c4.xlarge":   { "Arch": "HVM64" },
+            "d2.2xlarge":  { "Arch": "HVM64" },
+            "d2.4xlarge":  { "Arch": "HVM64" },
+            "d2.8xlarge":  { "Arch": "HVM64" },
+            "d2.xlarge":   { "Arch": "HVM64" },
+            "g2.2xlarge":  { "Arch": "HVMG2" },
+            "g2.8xlarge":  { "Arch": "HVMG2" },
+            "i2.2xlarge":  { "Arch": "HVM64" },
+            "i2.4xlarge":  { "Arch": "HVM64" },
+            "i2.8xlarge":  { "Arch": "HVM64" },
+            "i2.xlarge":   { "Arch": "HVM64" },
+            "m3.2xlarge":  { "Arch": "HVM64" },
+            "m3.large":    { "Arch": "HVM64" },
+            "m3.medium":   { "Arch": "HVM64" },
+            "m3.xlarge":   { "Arch": "HVM64" },
+            "m4.10xlarge": { "Arch": "HVM64" },
+            "m4.2xlarge":  { "Arch": "HVM64" },
+            "m4.4xlarge":  { "Arch": "HVM64" },
+            "m4.large":    { "Arch": "HVM64" },
+            "m4.xlarge":   { "Arch": "HVM64" },
+            "r3.2xlarge":  { "Arch": "HVM64" },
+            "r3.4xlarge":  { "Arch": "HVM64" },
+            "r3.8xlarge":  { "Arch": "HVM64" },
+            "r3.large":    { "Arch": "HVM64" },
+            "r3.xlarge":   { "Arch": "HVM64" },
+            "t2.large":    { "Arch": "HVM64" },
+            "t2.medium":   { "Arch": "HVM64" },
+            "t2.micro":    { "Arch": "HVM64" },
+            "t2.nano":     { "Arch": "HVM64" },
+            "t2.small":    { "Arch": "HVM64" }
+        }
+    },
+    "Parameters": {
+        "InstanceType": {
+            "Description": "EC2 instance type",
+            "Type": "String",
+            "Default": "c4.large",
+            "AllowedValues": [
+                "c3.2xlarge",
+                "c3.4xlarge",
+                "c3.8xlarge",
+                "c3.large",
+                "c3.xlarge",
+                "c4.2xlarge",
+                "c4.4xlarge",
+                "c4.8xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "d2.2xlarge",
+                "d2.4xlarge",
+                "d2.8xlarge",
+                "d2.xlarge",
+                "g2.2xlarge",
+                "g2.8xlarge",
+                "i2.2xlarge",
+                "i2.4xlarge",
+                "i2.8xlarge",
+                "i2.xlarge",
+                "m3.2xlarge",
+                "m3.large",
+                "m3.medium",
+                "m3.xlarge",
+                "m4.10xlarge",
+                "m4.2xlarge",
+                "m4.4xlarge",
+                "m4.large",
+                "m4.xlarge",
+                "r3.2xlarge",
+                "r3.4xlarge",
+                "r3.8xlarge",
+                "r3.large",
+                "r3.xlarge",
+                "t2.large",
+                "t2.medium",
+                "t2.micro",
+                "t2.nano",
+                "t2.small"
+            ],
+            "ConstraintDescription": "Must be a valid EC2 instance type."
+        },
+        "KeyName": {
+            "Description": "Name of existing EC2 SSH key",
+            "Type": "AWS::EC2::KeyPair::KeyName",
+            "Default": "",
+            "MinLength": "0",
+            "MaxLength": "255",
+            "AllowedPattern": "[\\x20-\\x7E]*",
+            "ConstraintDescription": "can contain only ASCII characters."
+        },
+        "SSHLocation": {
+            "Description": "CIDR range allowed to SSH into EC2 instance",
+            "Type": "String",
+            "MinLength": "9",
+            "MaxLength": "18",
+            "Default": "0.0.0.0/32",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+        },
+        "VPCRange": {
+            "Description": "CIDR range to assign to new VPC",
+            "Type": "String",
+            "MinLength": "9",
+            "MaxLength": "18",
+            "Default": "10.0.0.0/16",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+        },
+        "SubnetRange": {
+            "Description": "CIDR range to assign to new subnet in VPC",
+            "Type": "String",
+            "MinLength": "9",
+            "MaxLength": "18",
+            "Default": "10.0.0.0/24",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+        },
+        "GremlinServerPort": {
+            "Description": "The port to serve Gremlin Server Websockets API out of",
+            "Type": "String",
+            "MinLength": "1",
+            "MaxLength": "5",
+            "Default": "8182",
+            "AllowedPattern": "(\\d{1,5})",
+            "ConstraintDescription": "must be a valid port."
+        },
+        "StorageBackendPropertiesFileS3Url": {
+            "Description": "The Titan Storage Backend properties file S3 URL",
+            "Type": "String",
+            "MinLength": "1"
+        },
+        "TitanInstanceProfilePath": {
+            "Description": "The IAM path",
+            "Type": "String",
+            "Default": "/",
+            "MinLength": "1"
+        },
+        "TitanInstanceProfileRole": {
+            "Description": "The IAM role must include S3 read access",
+            "Type": "String",
+            "MinLength": "1"
+        },
+        "GraphEbsVolumeSize": {
+            "Description": "The size of the EBS volume on which to store the titan-tupl graph.",
+            "Type": "Number",
+            "Default": "8",
+            "MinValue":"1",
+            "MaxValue":"16384"
+        }
+    },
+    "Resources": {
+        "InstanceProfile": {
+            "Type": "AWS::IAM::InstanceProfile",
+            "Properties": {
+                "Path": {
+                    "Ref": "TitanInstanceProfilePath"
+                },
+                "Roles": [
+                    {
+                        "Ref": "TitanInstanceProfileRole"
+                    }
+                ]
+            }
+        },
+        "VPC": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "CidrBlock": {
+                    "Ref": "VPCRange"
+                },
+                "EnableDnsSupport" : "true",
+                "EnableDnsHostnames" : "true",
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackId"
+                        }
+                    }
+                ]
+            }
+        },
+        "Subnet": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "CidrBlock": {
+                    "Ref": "SubnetRange"
+                },
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackId"
+                        }
+                    }
+                ]
+            }
+        },
+        "InternetGateway": {
+            "Type": "AWS::EC2::InternetGateway",
+            "Properties": {
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackId"
+                        }
+                    }
+                ]
+            }
+        },
+        "AttachGateway": {
+            "Type": "AWS::EC2::VPCGatewayAttachment",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "InternetGatewayId": {
+                    "Ref": "InternetGateway"
+                }
+            }
+        },
+        "RouteTable": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackId"
+                        }
+                    }
+                ]
+            }
+        },
+        "Route": {
+            "Type": "AWS::EC2::Route",
+            "DependsOn": "AttachGateway",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "RouteTable"
+                },
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "GatewayId": {
+                    "Ref": "InternetGateway"
+                }
+            }
+        },
+        "SubnetRouteTableAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "Subnet"
+                },
+                "RouteTableId": {
+                    "Ref": "RouteTable"
+                }
+            }
+        },
+        "NetworkAcl": {
+            "Type": "AWS::EC2::NetworkAcl",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackId"
+                        }
+                    }
+                ]
+            }
+        },
+        "InboundSSHNetworkAclEntry": {
+            "Type": "AWS::EC2::NetworkAclEntry",
+            "Properties": {
+                "NetworkAclId": {
+                    "Ref": "NetworkAcl"
+                },
+                "RuleNumber": "101",
+                "Protocol": "6",
+                "RuleAction": "allow",
+                "Egress": "false",
+                "CidrBlock": {
+                    "Ref": "SSHLocation"
+                },
+                "PortRange": {
+                    "From": "22",
+                    "To": "22"
+                }
+            }
+        },
+        "InboundResponsePortsNetworkAclEntry": {
+            "Type": "AWS::EC2::NetworkAclEntry",
+            "Properties": {
+                "NetworkAclId": {
+                    "Ref": "NetworkAcl"
+                },
+                "RuleNumber": "102",
+                "Protocol": "6",
+                "RuleAction": "allow",
+                "Egress": "false",
+                "CidrBlock": "0.0.0.0/0",
+                "PortRange": {
+                    "From": "1024",
+                    "To": "65535"
+                }
+            }
+        },
+        "OutboundHTTPNetworkAclEntry": {
+            "Type": "AWS::EC2::NetworkAclEntry",
+            "Properties": {
+                "NetworkAclId": {
+                    "Ref": "NetworkAcl"
+                },
+                "RuleNumber": "101",
+                "Protocol": "6",
+                "RuleAction": "allow",
+                "Egress": "true",
+                "CidrBlock": "0.0.0.0/0",
+                "PortRange": {
+                    "From": "80",
+                    "To": "80"
+                }
+            }
+        },
+        "OutboundHTTPSNetworkAclEntry": {
+            "Type": "AWS::EC2::NetworkAclEntry",
+            "Properties": {
+                "NetworkAclId": {
+                    "Ref": "NetworkAcl"
+                },
+                "RuleNumber": "102",
+                "Protocol": "6",
+                "RuleAction": "allow",
+                "Egress": "true",
+                "CidrBlock": "0.0.0.0/0",
+                "PortRange": {
+                    "From": "443",
+                    "To": "443"
+                }
+            }
+        },
+        "OutboundResponsePortsNetworkAclEntry": {
+            "Type": "AWS::EC2::NetworkAclEntry",
+            "Properties": {
+                "NetworkAclId": {
+                    "Ref": "NetworkAcl"
+                },
+                "RuleNumber": "103",
+                "Protocol": "6",
+                "RuleAction": "allow",
+                "Egress": "true",
+                "CidrBlock": "0.0.0.0/0",
+                "PortRange": {
+                    "From": "1024",
+                    "To": "65535"
+                }
+            }
+        },
+        "SubnetNetworkAclAssociation": {
+            "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "Subnet"
+                },
+                "NetworkAclId": {
+                    "Ref": "NetworkAcl"
+                }
+            }
+        },
+        "InstanceSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "GroupDescription": "Enable SSH access via port 22",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "22",
+                        "ToPort": "22",
+                        "CidrIp": {
+                            "Ref": "SSHLocation"
+                        }
+                    }
+                ]
+            }
+        },
+        "WebServerInstance": {
+            "Type": "AWS::EC2::Instance",
+            "DependsOn": "AttachGateway",
+            "Properties": {
+                "BlockDeviceMappings": [
+                    {
+                        "DeviceName": "/dev/xvda",
+                        "Ebs": {
+                            "DeleteOnTermination": "true",
+                            "VolumeSize": "10",
+                            "VolumeType": "gp2"
+                        }
+                    },
+                    {
+                        "DeviceName": "/dev/sdb",
+                        "Ebs": {
+                            "DeleteOnTermination": "false",
+                            "VolumeSize": { "Ref" : "GraphEbsVolumeSize" },
+                            "VolumeType": "gp2"
+                        }
+                    }
+                ],
+                "DisableApiTermination": "FALSE",
+                "IamInstanceProfile": {
+                    "Ref": "InstanceProfile"
+                },
+                "ImageId": {
+                    "Fn::FindInMap": [
+                        "AWSRegionArch2AMI",
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        {
+                            "Fn::FindInMap": [
+                                "AWSInstanceType2Arch",
+                                {
+                                    "Ref": "InstanceType"
+                                },
+                                "Arch"
+                            ]
+                        }
+                    ]
+                },
+                "InstanceType": {
+                    "Ref": "InstanceType"
+                },
+                "KeyName": {
+                    "Ref": "KeyName"
+                },
+                "Monitoring": "false",
+                "NetworkInterfaces": [
+                    {
+                        "GroupSet": [
+                            {
+                                "Ref": "InstanceSecurityGroup"
+                            }
+                        ],
+                        "AssociatePublicIpAddress": "true",
+                        "DeviceIndex": "0",
+                        "DeleteOnTermination": "true",
+                        "SubnetId": {
+                            "Ref": "Subnet"
+                        }
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "Classmethod Storage Backend for Titan"
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash\n",
+                                "set -x\n",
+                                "#install dependencies\n",
+                                "yum install -y java-1.8.0-openjdk\n",
+                                "alternatives --set java /usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/java\n",
+                                "#constants for use in user data script\n",
+                                "export GREMLIN_SERVER_USERNAME='ec2-user'\n",
+                                "export LOG_DIR=/var/log/gremlin-server\n",
+                                "export SERVER_DIRNAME=tupl-titan100-storage-backend-1.0.0-hadoop1\n",
+                                "export SERVER_ZIP=${SERVER_DIRNAME}.zip\n",
+                                "export PACKAGES_DIR=/usr/local/packages\n",
+                                "export INSTALL_DIR=${PACKAGES_DIR}/${SERVER_DIRNAME}\n",
+                                "export SERVICE_SCRIPT=${INSTALL_DIR}/bin/gremlin-server-service.sh\n",
+                                "export ZIP_URL='https://tupl-titan-",
+                                {
+                                    "Ref": "AWS::Region"
+                                },
+                                ".s3.amazonaws.com/tupl-titan100-storage-backend-1.0.0-hadoop1.zip'\n",
+                                "#set up directories\n",
+                                "mkdir -p ${LOG_DIR}\n",
+                                "mkdir -p ${INSTALL_DIR}\n",
+                                "chown -R ${GREMLIN_SERVER_USERNAME}:${GREMLIN_SERVER_USERNAME} ${LOG_DIR}\n",
+                                "#download package\n",
+                                "pushd ${PACKAGES_DIR}\n",
+                                "curl -L -o ./${SERVER_ZIP} ${ZIP_URL}\n",
+                                "unzip -qq ${SERVER_ZIP}\n",
+                                "chmod u+x ${SERVICE_SCRIPT}\n",
+                                "#install as a service\n",
+                                "ln -s ${SERVICE_SCRIPT} /etc/init.d/gremlin-server\n",
+                                "chkconfig --add gremlin-server\n",
+                                "#download the Classmethod Tupl Storage Backend for Titan properties file\n",
+                                "BACKEND_PROPERTIES=${INSTALL_DIR}/conf/gremlin-server/tupl.properties\n",
+                                "aws s3 cp ",
+                                {
+                                    "Ref": "StorageBackendPropertiesFileS3Url"
+                                },
+                                " ${BACKEND_PROPERTIES}\n",
+                                "#create the graph filesystem - TODO only format if FS doesnt exist\n",
+                                "mkfs -t ext4 /dev/xvdb || { echo 'unable to create ext4 filesystem on /dev/xvdb'; exit 1; }\n",
+                                "mkdir -p /var/tupl-xvdb || { echo 'unable to create mount point /var/tupl-xvdb'; exit 1; }\n",
+                                "mount /dev/xvdb /var/tupl-xvdb || { echo 'unable to mount /dev/xvdb on /var/tupl-xvdb'; exit 1; }\n",
+                                "echo '/dev/xvdb /var/tupl-xvdb ext4 defaults,nofail 0 2' >> /etc/fstab\n",
+                                "mount -a || { echo 'fstab configuration bad'; exit 1; }\n",
+                                "ln -s /var/tupl-xvdb ${INSTALL_DIR}/data\n",
+                                "#make ec2-user own everything\n",
+                                "chown -R ${GREMLIN_SERVER_USERNAME}:${GREMLIN_SERVER_USERNAME} ${INSTALL_DIR} /var/tupl-xvdb ${INSTALL_DIR}/data\n",
+                                "#start Gremlin Server endpoints \n",
+                                "service gremlin-server start\n\n"
+                            ]
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "SshTunnels": {
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "ssh -o ServerAliveInterval=50 -nNT -L",
+                        {
+                            "Ref": "GremlinServerPort"
+                        },
+                        ":localhost:",
+                        {
+                            "Ref": "GremlinServerPort"
+                        },
+                        " -i ${HOME}/.ec2/",
+                        {
+                            "Ref": "KeyName"
+                        },
+                        ".pem.txt ec2-user@",
+                        {
+                            "Fn::GetAtt": [
+                                "WebServerInstance",
+                                "PublicDnsName"
+                            ]
+                        }
+                    ]
+                ]
+            },
+            "Description": "Use these SSH tunnels to access Gremlin Server."
+        },
+        "GremlinServerEndpoint": {
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "http://localhost:",
+                        {
+                            "Ref": "GremlinServerPort"
+                        }
+                    ]
+                ]
+            },
+            "Description": "This is the Gremlin Server Websockets endpoint after creating the SSH tunnel."
+        },
+        "SshAccess": {
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "ssh -o ServerAliveInterval=50 -i ${HOME}/.ec2/",
+                        {
+                            "Ref": "KeyName"
+                        },
+                        ".pem.txt ec2-user@",
+                        {
+                            "Fn::GetAtt": [
+                                "WebServerInstance",
+                                "PublicDnsName"
+                            ]
+                        }
+                    ]
+                ]
+            },
+            "Description": "This is how you gain remote access to the machine."
+        },
+        "Note": {
+            "Value": "Wait while your EC2 host to boot and start Gremlin Server with the Classmethod Storage Backend for Titan.",
+            "Description": ""
+        }
+    }
+}
