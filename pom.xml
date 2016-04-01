@@ -29,22 +29,38 @@ https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L2
     <url>https://github.com/classmethod-aws/tupl-titan-storage-backend</url>
     <description>The Classmethod Tupl Storage Backend for Titan: Distributed Graph Database allows Titan graphs to use Tupl as a storage backend.</description>
     <scm>
+        <connection>scm:git:git@github.com:classmethod/tupl-titan-storage-backend.git</connection>
+        <developerConnection>scm:git:git@github.com:classmethod/tupl-titan-storage-backend.git</developerConnection>
         <url>git@github.com:classmethod/tupl-titan-storage-backend.git</url>
         <tag>titan1.0.0-1.0.0</tag>
     </scm>
+    <organization>
+        <name>Classmethod, Inc.</name>
+        <url>http://classmethod.jp</url>
+    </organization>
+    <issueManagement>
+        <url>https://github.com/classmethod/tupl-titan-storage-backend/issues</url>
+    </issueManagement>
     <properties>
-        <default.test.jvm.opts>-Xms256m -Xmx1280m -XX:+HeapDumpOnOutOfMemoryError</default.test.jvm.opts>
-        <mem.jvm.opts>-Xms256m -Xmx768m -ea -XX:+HeapDumpOnOutOfMemoryError</mem.jvm.opts>
+        <default.test.jvm.opts>-Xms256m -Xmx1280m
+            -XX:+HeapDumpOnOutOfMemoryError</default.test.jvm.opts>
+        <mem.jvm.opts>-Xms256m -Xmx768m -ea
+            -XX:+HeapDumpOnOutOfMemoryError</mem.jvm.opts>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.8</jdk.version>
         <titan.version>1.0.0</titan.version>
         <tinkerpop.version>3.0.1-incubating</tinkerpop.version>
+        <tupl.version>v1.2.7.1</tupl.version>
         <dependency.plugin.version>2.10</dependency.plugin.version>
         <maven.assembly.plugin.version>2.5.5</maven.assembly.plugin.version>
         <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
         <maven.surefire.version>2.18.1</maven.surefire.version>
         <maven.resources.plugin.version>2.7</maven.resources.plugin.version>
         <exec.maven.plugin.version>1.2</exec.maven.plugin.version>
+        <nexus.staging.maven.plugin.version>1.6.7</nexus.staging.maven.plugin.version>
+        <maven.source.plugin.version>3.0.0</maven.source.plugin.version>
+        <maven.javadoc.plugin.version>2.10.3</maven.javadoc.plugin.version>
+        <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
         <slf4j.version>1.7.12</slf4j.version>
         <opencsv.version>2.4</opencsv.version>
         <commons.logging.version>1.1.1</commons.logging.version>
@@ -55,6 +71,8 @@ https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L2
         <developer>
             <name>Alexander Patrikalakis</name>
             <email>amcp@me.com</email>
+            <organization>Classmethod, Inc.</organization>
+            <organizationUrl>classmethod.jp</organizationUrl>
             <url>https://www.linkedin.com/in/amcpatrix/en</url>
         </developer>
     </developers>
@@ -70,7 +88,7 @@ https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L2
         <dependency>
             <groupId>com.github.cojen</groupId>
             <artifactId>Tupl</artifactId>
-            <version>v1.2.7.1</version>
+            <version>${tupl.version}</version>
         </dependency>
         <dependency>
             <groupId>com.thinkaurelius.titan</groupId>
@@ -128,6 +146,57 @@ https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L2
     <build>
         <plugins>
             <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>${nexus.staging.maven.plugin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven.source.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven.javadoc.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>${maven.gpg.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.plugin.version}</version>
                 <configuration>
@@ -172,7 +241,7 @@ https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L2
         </plugins>
     </build>
     <profiles>
-    	<profile>
+        <profile>
             <id>integration-tests</id>
             <build>
                 <plugins>
@@ -195,7 +264,7 @@ https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L2
                 </plugins>
             </build>
         </profile>
-    	<profile>
+        <profile>
             <id>start-gremlin</id>
             <build>
                 <plugins>
@@ -233,21 +302,17 @@ https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L2
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <!-- 
-END adaptation of:
-https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L339
-     -->
+    <!-- END adaptation of: https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L339 -->
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
     <repositories>
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
     </repositories>
-    <organization>
-        <name>Classmethod, Inc.</name>
-        <url>http://classmethod.jp</url>
-    </organization>
-    <issueManagement>
-        <url>https://github.com/classmethod/tupl-titan-storage-backend/issues</url>
-    </issueManagement>
 </project>

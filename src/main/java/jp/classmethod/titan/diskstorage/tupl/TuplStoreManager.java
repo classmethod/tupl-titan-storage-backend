@@ -176,7 +176,7 @@ public class TuplStoreManager extends AbstractStoreManager implements OrderedKey
          * This transaction configuration should disable transaction isolation as it
          * will only be used for reads that are rolled back.
          * the configurations, in decreasing order of precedence
-         * scanTxConfig overrides > graphConfiguration > defaultValue
+         * scanTxConfig overrides graphConfiguration which overrides defaultValue
          */
         @Override public Configuration getScanTxConfig() {
             return buildGraphConfig().set(TUPL_LOCK_MODE, LockMode.UNSAFE.name());
