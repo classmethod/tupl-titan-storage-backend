@@ -113,6 +113,11 @@ public class TuplStoreManager extends AbstractStoreManager implements OrderedKey
             "complete more quickly. As a result, the main database file requires less pre-allocated " +
             "pages and is smaller.",
             ConfigOption.Type.MASKABLE, Boolean.FALSE);
+    public static final ConfigOption<Boolean> TUPL_DIRECT_PAGE_ACCESS = new ConfigOption<Boolean>(TUPL_NS,
+            "direct-page-access",
+            "Set true to allocate all pages off the Java heap, offering increased performance and " +
+            "reduced garbage collection activity.",
+            ConfigOption.Type.MASKABLE, Boolean.FALSE);
     public static final ConfigOption<Integer> TUPL_PAGE_SIZE = new ConfigOption<Integer>(TUPL_NS,
             "page-size", "The page size in bytes.",
             ConfigOption.Type.MASKABLE, Integer.valueOf(4096));
@@ -228,6 +233,7 @@ public class TuplStoreManager extends AbstractStoreManager implements OrderedKey
         final long lockTimeout = storageConfig.get(TUPL_LOCK_TIMEOUT);
         final boolean syncWrites = storageConfig.get(TUPL_SYNC_WRITES);
         final int pageSize = storageConfig.get(TUPL_PAGE_SIZE);
+        final boolean directPageAccess = storageConfig.get(TUPL_DIRECT_PAGE_ACCESS);
         final long checkpointRate = storageConfig.get(TUPL_CHECKPOINT_RATE);
         final long checkpointDelayThreshold = storageConfig.get(TUPL_CHECKPOINT_DELAY_THRESHOLD);
         final long checkpointSizeThreshold = storageConfig.get(TUPL_CHECKPOINT_SIZE_THRESHOLD);
@@ -244,6 +250,7 @@ public class TuplStoreManager extends AbstractStoreManager implements OrderedKey
                                      .lockTimeout(lockTimeout, TimeUnit.MILLISECONDS)
                                      .syncWrites(syncWrites)
                                      .pageSize(pageSize)
+                                     .directPageAccess(directPageAccess)
                                      .checkpointRate(checkpointRate, TimeUnit.MILLISECONDS)
                                      .checkpointDelayThreshold(checkpointDelayThreshold, TimeUnit.MILLISECONDS)
                                      .checkpointSizeThreshold(checkpointSizeThreshold);

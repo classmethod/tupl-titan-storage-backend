@@ -50,7 +50,7 @@ https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L2
         <jdk.version>1.8</jdk.version>
         <titan.version>1.0.0</titan.version>
         <tinkerpop.version>3.0.1-incubating</tinkerpop.version>
-        <tupl.version>v1.2.7.1</tupl.version>
+        <tupl.version>master</tupl.version>
         <dependency.plugin.version>2.10</dependency.plugin.version>
         <maven.assembly.plugin.version>2.5.5</maven.assembly.plugin.version>
         <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
