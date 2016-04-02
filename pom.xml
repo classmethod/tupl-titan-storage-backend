@@ -23,7 +23,7 @@ https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L2
     <modelVersion>4.0.0</modelVersion>
     <groupId>jp.classmethod</groupId>
     <artifactId>tupl-titan100-storage-backend</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
     <name>Classmethod Tupl Storage Backend for Titan</name>
     <url>https://github.com/classmethod-aws/tupl-titan-storage-backend</url>
