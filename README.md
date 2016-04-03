@@ -173,10 +173,10 @@ files available on the
 We repackaged these zip files in order to include the Classmethod Tupl Storage Backend
 for Titan and its dependencies. The
 [repackaged version of the Titan zip](https://s3-us-west-2.amazonaws.com/tupl-titan-us-west-2/tupl-titan100-storage-backend-1.0.1-hadoop1.zip)'s
-SHA-256 hash is `8cfbafbd1204071c687cd11b43d92e8eb24f4f82240e44327a2506a481cd5adf`.
+SHA-256 hash is `27915a82bac4d9bd1793efc4c7c98be68280be420a30f27994b9aea480c69e3b`.
 
 1. Click [<img src="http://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/images/cloudformation-launch-stack-button.png">](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#cstack=sn~ClassmethodTuplTitanGremlinServer|turl~https://s3-us-west-2.amazonaws.com/tupl-titan-us-west-2/tupl-titan100-storage-backend-cfn.json) to launch the stack in Oregon (the usual Amazon EC2 and EBS charges will apply). The SHA-256 hash of the
-CloudFormation script is `72ae8192944d3e227a87a8828109ea2f99839c697e92a69f7ecd7bf0106611b5`.
+CloudFormation script is `27915a82bac4d9bd1793efc4c7c98be68280be420a30f27994b9aea480c69e3b`.
 2. On the Specify Parameters page, you need to specify the following:
   * The size of the EBS volume used to store the graph
   * EC2 Instance Type
