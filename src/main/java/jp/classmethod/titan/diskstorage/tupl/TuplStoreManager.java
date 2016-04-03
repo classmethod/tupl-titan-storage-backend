@@ -117,7 +117,7 @@ public class TuplStoreManager extends AbstractStoreManager implements OrderedKey
             "direct-page-access",
             "Set true to allocate all pages off the Java heap, offering increased performance and " +
             "reduced garbage collection activity.",
-            ConfigOption.Type.MASKABLE, Boolean.FALSE);
+            ConfigOption.Type.MASKABLE, Boolean.TRUE);
     public static final ConfigOption<Integer> TUPL_PAGE_SIZE = new ConfigOption<Integer>(TUPL_NS,
             "page-size", "The page size in bytes.",
             ConfigOption.Type.MASKABLE, Integer.valueOf(4096));

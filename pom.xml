@@ -32,7 +32,7 @@ https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L2
         <connection>scm:git:git@github.com:classmethod/tupl-titan-storage-backend.git</connection>
         <developerConnection>scm:git:git@github.com:classmethod/tupl-titan-storage-backend.git</developerConnection>
         <url>git@github.com:classmethod/tupl-titan-storage-backend.git</url>
-        <tag>titan1.0.0-1.0.0</tag>
+        <tag>titan1.0.0-${project.version}</tag>
     </scm>
     <organization>
         <name>Classmethod, Inc.</name>
@@ -286,7 +286,7 @@ https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L2
                                     <executable>java</executable>
                                     <arguments>
                                         <argument>-cp</argument>
-                                        <argument>${basedir}/target/dependencies/*${path.separator}${basedir}/target/tupl-titan100-storage-backend-1.0.0.jar</argument>
+                                        <argument>${basedir}/target/dependencies/*${path.separator}${basedir}/target/tupl-titan100-storage-backend-${project.version}.jar</argument>
                                         <argument>org.apache.tinkerpop.gremlin.console.Console</argument>
                                     </arguments>
                                 </configuration>

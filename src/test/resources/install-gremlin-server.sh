@@ -27,7 +27,7 @@ export ARTIFACT_NAME="tupl-titan100-storage-backend"
 export TITAN_TUPL_HOME=${PWD}
 export TITAN_TUPL_TARGET=${TITAN_TUPL_HOME}/target
 export TITAN_VERSION="1.0.0"
-export TUPL_PLUGIN_VERSION="1.0.0"
+export TUPL_PLUGIN_VERSION=`mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | grep -v INFO`
 export TITAN_VANILLA_SERVER_DIRNAME=titan-${TITAN_VERSION}-hadoop1
 export TITAN_VANILLA_SERVER_ZIP=${TITAN_VANILLA_SERVER_DIRNAME}.zip
 export TITAN_TUPL_SERVER_DIRNAME=${ARTIFACT_NAME}-${TUPL_PLUGIN_VERSION}-hadoop1

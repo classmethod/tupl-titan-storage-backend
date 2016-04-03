@@ -172,10 +172,11 @@ files available on the
 [Titan downloads page](https://github.com/thinkaurelius/titan/wiki/Downloads).
 We repackaged these zip files in order to include the Classmethod Tupl Storage Backend
 for Titan and its dependencies. The
-[repackaged version of the Titan zip](https://s3-us-west-2.amazonaws.com/tupl-titan-us-west-2/tupl-titan100-storage-backend-1.0.0-hadoop1.zip)'s
-SHA-256 hash is `d8f3cd55f0d95b776f378547b9535ba6674717dc677180e0b4ad91211a39ddd2`.
+[repackaged version of the Titan zip](https://s3-us-west-2.amazonaws.com/tupl-titan-us-west-2/tupl-titan100-storage-backend-1.0.1-hadoop1.zip)'s
+SHA-256 hash is `8cfbafbd1204071c687cd11b43d92e8eb24f4f82240e44327a2506a481cd5adf`.
 
-1. Click [<img src="http://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/images/cloudformation-launch-stack-button.png">](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#cstack=sn~ClassmethodTuplTitanGremlinServer|turl~https://s3-us-west-2.amazonaws.com/tupl-titan-us-west-2/tupl-titan100-storage-backend-cfn.json) to launch the stack in Oregon (the usual Amazon EC2 and EBS charges will apply). The SHA-256 hash of the CloudFormation script is `c86c16836ac655f9b015cdd4694bb7517b0e1fc55fa617de4f45d6e894044d85`.
+1. Click [<img src="http://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/images/cloudformation-launch-stack-button.png">](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#cstack=sn~ClassmethodTuplTitanGremlinServer|turl~https://s3-us-west-2.amazonaws.com/tupl-titan-us-west-2/tupl-titan100-storage-backend-cfn.json) to launch the stack in Oregon (the usual Amazon EC2 and EBS charges will apply). The SHA-256 hash of the
+CloudFormation script is `72ae8192944d3e227a87a8828109ea2f99839c697e92a69f7ecd7bf0106611b5`.
 2. On the Specify Parameters page, you need to specify the following:
   * The size of the EBS volume used to store the graph
   * EC2 Instance Type
@@ -231,6 +232,7 @@ are in the `storage.tupl` (`s.t`) namespace subset.
 | `s.t.durability-mode` | Default transaction durability mode. | String | SYNC | MASKABLE |
 | `s.t.sync-writes` | Set true to ensure all writes to the main database file are immediately durable, although not checkpointed. This option typically reduces overall performance, but checkpoints complete more quickly. As a result, the main database file requires less pre-allocated pages and is smaller. | Boolean | false | MASKABLE |
 | `s.t.page-size` | The page size in bytes. | Integer | 4096 | MASKABLE |
+| `s.t.direct-page-access` | Set true to allocate all pages off the Java heap, offering increased performance and reduced garbage collection activity. | Boolean | true | MASKABLE |
 
 ### Tupl Locking Configuration Parameters
 All of the following parameters are in the `storage.tupl.lock` (`s.t.l`) namespace.
