@@ -68,7 +68,7 @@
 # 2b) If you're running Ubuntu: update-rc.d gremlin-server defaults
 #
 # You have to SET the Gremlin Server installation directory here:
-GREMLIN_SERVER_DIR="/usr/local/packages/tupl-titan100-storage-backend-1.0.0-hadoop1"
+GREMLIN_SERVER_DIR="/usr/local/packages/gremlin-server"
 GREMLIN_SERVER_LOG_DIR="/var/log/gremlin-server"
 # Specify the user to run Gremlin Server as:
 GREMLIN_SERVER_USER="ec2-user"

@@ -520,6 +520,7 @@
                                 "#set up directories\n",
                                 "mkdir -p ${LOG_DIR}\n",
                                 "mkdir -p ${INSTALL_DIR}\n",
+                                "ln -s ${INSTALL_DIR} /usr/local/packages/gremlin-server\n",
                                 "chown -R ${GREMLIN_SERVER_USERNAME}:${GREMLIN_SERVER_USERNAME} ${LOG_DIR}\n",
                                 "#download package\n",
                                 "pushd ${PACKAGES_DIR}\n",
