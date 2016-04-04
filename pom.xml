@@ -22,8 +22,8 @@ https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L2
  -->
     <modelVersion>4.0.0</modelVersion>
     <groupId>jp.classmethod</groupId>
-    <artifactId>tupl-titan100-storage-backend</artifactId>
-    <version>1.0.1</version>
+    <artifactId>tupl-titan110-storage-backend</artifactId>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>Classmethod Tupl Storage Backend for Titan</name>
     <url>https://github.com/classmethod-aws/tupl-titan-storage-backend</url>
@@ -32,7 +32,7 @@ https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L2
         <connection>scm:git:git@github.com:classmethod/tupl-titan-storage-backend.git</connection>
         <developerConnection>scm:git:git@github.com:classmethod/tupl-titan-storage-backend.git</developerConnection>
         <url>git@github.com:classmethod/tupl-titan-storage-backend.git</url>
-        <tag>titan1.0.0-${project.version}</tag>
+        <tag>titan1.1.0-${project.version}</tag>
     </scm>
     <organization>
         <name>Classmethod, Inc.</name>
@@ -48,8 +48,8 @@ https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L2
             -XX:+HeapDumpOnOutOfMemoryError</mem.jvm.opts>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.8</jdk.version>
-        <titan.version>1.0.0</titan.version>
-        <tinkerpop.version>3.0.1-incubating</tinkerpop.version>
+        <titan.version>1.1.0-SNAPSHOT</titan.version>
+        <tinkerpop.version>3.1.1-incubating</tinkerpop.version>
         <tupl.version>v1.3.0</tupl.version>
         <dependency.plugin.version>2.10</dependency.plugin.version>
         <maven.assembly.plugin.version>2.5.5</maven.assembly.plugin.version>
@@ -286,7 +286,7 @@ https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L2
                                     <executable>java</executable>
                                     <arguments>
                                         <argument>-cp</argument>
-                                        <argument>${basedir}/target/dependencies/*${path.separator}${basedir}/target/tupl-titan100-storage-backend-${project.version}.jar</argument>
+                                        <argument>${basedir}/target/dependencies/*${path.separator}${basedir}/target/${project.artifactId}-${project.version}.jar</argument>
                                         <argument>org.apache.tinkerpop.gremlin.console.Console</argument>
                                     </arguments>
                                 </configuration>

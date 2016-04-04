@@ -65,7 +65,7 @@ public class TuplStorageSetup extends StorageSetup {
     public static Configuration getTuplGraphBaseConfiguration() {
         BaseConfiguration config = new BaseConfiguration();
         Configuration storage = config.subset("storage");
-        storage.addProperty(GraphDatabaseConfiguration.STORAGE_DIRECTORY.getName(), getHomeDir());
+        storage.addProperty(GraphDatabaseConfiguration.STORAGE_DIRECTORY.getName(), getHomeDir(null /*subdir*/));
         storage.addProperty(GraphDatabaseConfiguration.STORAGE_BACKEND.getName(),
                 "jp.classmethod.titan.diskstorage.tupl.TuplStoreManager");
         return config;

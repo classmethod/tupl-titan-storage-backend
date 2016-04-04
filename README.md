@@ -23,7 +23,7 @@ The following is a list of features of the Classmethod Tupl Storage Backend for 
 * Configurable storage directory allow multiple graphs to be stored in a single
 host in the same region.
 * Integrated with Titan metrics.
-* Titan 1.0.0 and Tinkerpop 3.0.1-incubating compatibility.
+* Titan 1.1.0 and Tinkerpop 3.1.1-incubating compatibility.
 * All the store features titan-berkeleyje but with improved performance of Tupl
 across the board.
 * Permissive Apache 2.0 license both for this Storage Backend and Tupl.
@@ -59,7 +59,7 @@ includes Gremlin Server.
 5. Change directories to the Gremlin Server home.
 
     ```
-    cd server/tupl-titan100-storage-backend-1.0.0-hadoop1
+    cd server/tupl-titan110-storage-backend-1.0.0-hadoop1
     ```
 6. Start Gremlin Server:
 
@@ -113,7 +113,7 @@ have a weapon that is not a shield or claws.
     :> com.thinkaurelius.titan.example.GraphOfTheGodsFactory.load(graph)
     ```
 3. Now you can follow the rest of the
-[Titan Getting Started](http://s3.thinkaurelius.com/docs/titan/1.0.0/getting-started.html#_global_graph_indices)
+[Titan Getting Started](http://s3.thinkaurelius.com/docs/titan/1.1.0/getting-started.html#_global_graph_indices)
 documentation, starting from the Global Graph Indeces section. You need to
 prepend each command with `:>` for remotely executing the commands on the
 Gremlin Server endpoint. Also whenever you remotely execute traversals that
@@ -138,7 +138,7 @@ in the scripts that run when Gremlin server is turned on. See the
 file for more information.
 4. Alternatively, repeat steps 1 through 8 of the Marvel graph section and
 follow the examples in the
-[TinkerPop documentation](http://tinkerpop.incubator.apache.org/docs/3.0.1-incubating/#_mutating_the_graph),
+[TinkerPop documentation](http://tinkerpop.incubator.apache.org/docs/3.1.1-incubating/#_mutating_the_graph),
 prepending each command with `:>` for remote execution. Skip the
 `TinkerGraph.open()` step as the remote execution environment already has a
 `graph` variable set up.
@@ -172,10 +172,10 @@ files available on the
 [Titan downloads page](https://github.com/thinkaurelius/titan/wiki/Downloads).
 We repackaged these zip files in order to include the Classmethod Tupl Storage Backend
 for Titan and its dependencies. The
-[repackaged version of the Titan zip](https://s3-us-west-2.amazonaws.com/tupl-titan-us-west-2/tupl-titan100-storage-backend-1.0.1-hadoop1.zip)'s
+[repackaged version of the Titan zip](https://s3-us-west-2.amazonaws.com/tupl-titan-us-west-2/tupl-titan110-storage-backend-1.1.0-hadoop1.zip)'s
 SHA-256 hash is `27915a82bac4d9bd1793efc4c7c98be68280be420a30f27994b9aea480c69e3b`.
 
-1. Click [<img src="http://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/images/cloudformation-launch-stack-button.png">](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#cstack=sn~ClassmethodTuplTitanGremlinServer|turl~https://s3-us-west-2.amazonaws.com/tupl-titan-us-west-2/tupl-titan100-storage-backend-cfn.json) to launch the stack in Oregon (the usual Amazon EC2 and EBS charges will apply). The SHA-256 hash of the
+1. Click [<img src="http://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/images/cloudformation-launch-stack-button.png">](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#cstack=sn~ClassmethodTuplTitanGremlinServer|turl~https://s3-us-west-2.amazonaws.com/tupl-titan-us-west-2/tupl-titan110-storage-backend-cfn.json) to launch the stack in Oregon (the usual Amazon EC2 and EBS charges will apply). The SHA-256 hash of the
 CloudFormation script is `27915a82bac4d9bd1793efc4c7c98be68280be420a30f27994b9aea480c69e3b`.
 2. On the Specify Parameters page, you need to specify the following:
   * The size of the EBS volume used to store the graph

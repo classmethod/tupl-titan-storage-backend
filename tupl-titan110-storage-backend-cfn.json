@@ -1,5 +1,5 @@
 {
-    "Description": "This stack creates a VPC, an EC2 Amazon Linux 2016.03 host in the VPC with a Public IP, and deploys Gremlin Server with the Classmethod Tupl Storage Backend for Titan 1.0.1 on it. **WARNING** This template creates an Amazon EC2 instance. You will be billed for the AWS resources used if you create a stack from this template.",
+    "Description": "This stack creates a VPC, an EC2 Amazon Linux 2016.03 host in the VPC with a Public IP, and deploys Gremlin Server with the Classmethod Tupl Storage Backend for Titan on it. **WARNING** This template creates an Amazon EC2 instance. You will be billed for the AWS resources used if you create a stack from this template.",
     "AWSTemplateFormatVersion": "2010-09-09",
     "Mappings": {
         "AWSRegionArch2AMI": {
@@ -507,7 +507,7 @@
                                 "#constants for use in user data script\n",
                                 "export GREMLIN_SERVER_USERNAME='ec2-user'\n",
                                 "export LOG_DIR=/var/log/gremlin-server\n",
-                                "export SERVER_DIRNAME=tupl-titan100-storage-backend-1.0.1-hadoop1\n",
+                                "export SERVER_DIRNAME=tupl-titan110-storage-backend-1.0.0-hadoop1\n",
                                 "export SERVER_ZIP=${SERVER_DIRNAME}.zip\n",
                                 "export PACKAGES_DIR=/usr/local/packages\n",
                                 "export INSTALL_DIR=${PACKAGES_DIR}/${SERVER_DIRNAME}\n",
@@ -516,7 +516,7 @@
                                 {
                                     "Ref": "AWS::Region"
                                 },
-                                ".s3.amazonaws.com/tupl-titan100-storage-backend-1.0.1-hadoop1.zip'\n",
+                                ".s3.amazonaws.com/tupl-titan110-storage-backend-1.0.0-hadoop1.zip'\n",
                                 "#set up directories\n",
                                 "mkdir -p ${LOG_DIR}\n",
                                 "mkdir -p ${INSTALL_DIR}\n",
