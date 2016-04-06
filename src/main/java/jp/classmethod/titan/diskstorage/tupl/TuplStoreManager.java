@@ -202,24 +202,21 @@ public class TuplStoreManager extends AbstractStoreManager implements OrderedKey
     public TuplStoreManager(Configuration storageConfig) throws BackendException {
         //sets transactional, batchLoading, directory
         super(storageConfig);
-        //the directory can be null, which means the the tupl database will be in memory only
         //begin adaptation of LocalStoreManager.java
-        if (!storageConfig.has(GraphDatabaseConfiguration.STORAGE_DIRECTORY)) {
-            directory = null;
-        } else {
-            directory = DirectoryUtil.getOrCreateDataDirectory(storageConfig.get(GraphDatabaseConfiguration.STORAGE_DIRECTORY));
-        }
+
         //end adaptation of LocalStoreManager.java
-        final boolean persistent = null != directory;
+        prefix = storageConfig.has(TUPL_PREFIX) ? storageConfig.get(TUPL_PREFIX) : null;
+        final boolean persistent = null != prefix;
         if(persistent) {
-            if(!storageConfig.has(TUPL_PREFIX)) {
-                throw new IllegalArgumentException("if persisting, must provide a db file prefix");
+            if (!storageConfig.has(GraphDatabaseConfiguration.STORAGE_DIRECTORY)) {
+                directory = new File(System.getProperty("user.dir"));
+            } else {
+                directory = DirectoryUtil.getOrCreateDataDirectory(storageConfig.get(GraphDatabaseConfiguration.STORAGE_DIRECTORY));
             }
-            prefix = storageConfig.get(TUPL_PREFIX);
             prefixFile = new File(directory, prefix);
             lockFile = new File(prefixFile.getAbsolutePath() + ".lock");
         } else {
-            prefix = null;
+            directory = null;
             prefixFile = null;
             lockFile = null;
         }
