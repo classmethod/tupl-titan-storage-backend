@@ -23,7 +23,7 @@ https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L2
     <modelVersion>4.0.0</modelVersion>
     <groupId>jp.classmethod</groupId>
     <artifactId>tupl-titan100-storage-backend</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
     <name>Classmethod Tupl Storage Backend for Titan</name>
     <url>https://github.com/classmethod-aws/tupl-titan-storage-backend</url>
@@ -50,7 +50,7 @@ https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L2
         <jdk.version>1.8</jdk.version>
         <titan.version>1.0.0</titan.version>
         <tinkerpop.version>3.0.1-incubating</tinkerpop.version>
-        <tupl.version>v1.3.0</tupl.version>
+        <tupl.version>v1.3.3.1</tupl.version>
         <dependency.plugin.version>2.10</dependency.plugin.version>
         <maven.assembly.plugin.version>2.5.5</maven.assembly.plugin.version>
         <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
@@ -59,7 +59,7 @@ https://github.com/awslabs/dynamodb-titan-storage-backend/blob/1.0.0/pom.xml#L2
         <exec.maven.plugin.version>1.2</exec.maven.plugin.version>
         <nexus.staging.maven.plugin.version>1.6.7</nexus.staging.maven.plugin.version>
         <maven.source.plugin.version>3.0.0</maven.source.plugin.version>
-        <maven.javadoc.plugin.version>2.10.3</maven.javadoc.plugin.version>
+        <maven.javadoc.plugin.version>2.10.4</maven.javadoc.plugin.version>
         <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
         <slf4j.version>1.7.12</slf4j.version>
         <opencsv.version>2.4</opencsv.version>
